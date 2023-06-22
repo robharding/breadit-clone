@@ -92,16 +92,17 @@ const Layout = async ({ children, params: { slug } }: LayoutProps) => {
                   isSubscribed={isSubscribed}
                 />
               ) : null}
-
-              <Link
-                className={buttonVariants({
-                  variant: "outline",
-                  className: "w-full mb-6",
-                })}
-                href={`/r/${subreddit.name}/submit`}
-              >
-                Create Post
-              </Link>
+              {isSubscribed ? (
+                <Link
+                  className={buttonVariants({
+                    variant: "outline",
+                    className: "w-full mb-6",
+                  })}
+                  href={`/r/${subreddit.name}/submit`}
+                >
+                  Create Post
+                </Link>
+              ) : null}
             </dl>
           </div>
         </div>
