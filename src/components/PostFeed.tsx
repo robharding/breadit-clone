@@ -57,19 +57,15 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
         );
 
         // if it's the last post, add a ref to it so we can fetch more posts when its in view
-        if (index === posts.length - 1) {
-          return (
-            <li key={post.id} ref={ref}>
-              <Post subredditName={post.subreddit.name} post={post} />
-            </li>
-          );
-        } else {
-          return (
-            <li key={post.id}>
-              <Post subredditName={post.subreddit.name} post={post} />
-            </li>
-          );
-        }
+        return (
+          <li key={post.id} ref={index === posts.length - 1 ? ref : undefined}>
+            <Post
+              subredditName={post.subreddit.name}
+              post={post}
+              commentAmt={post.comments.length}
+            />
+          </li>
+        );
       })}
     </ul>
   );
