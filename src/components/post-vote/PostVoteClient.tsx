@@ -38,7 +38,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         voteType: type,
       };
 
-      await axios.post("/api/subreddit/post/vote", payload);
+      await axios.patch("/api/subreddit/post/vote", payload);
     },
   });
 
