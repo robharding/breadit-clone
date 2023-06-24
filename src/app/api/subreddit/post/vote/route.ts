@@ -1,7 +1,11 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { redis } from "@/lib/redis";
 import { PostVoteValidator } from "@/lib/validators/vote";
+import { CachedPost } from "@/types/redis";
 import { z } from "zod";
+
+const CACHE_AFTER_UPVOTES = 1
 
 export async function PATCH(req: Request) {
   try {
@@ -67,6 +71,23 @@ export async function PATCH(req: Request) {
       (acc, vote) => (vote.type == "UP" ? acc + 1 : acc - 1),
       0
     );
+
+    // cache high engagement posts
+    if(Math.abs(votesAmt) >= CACHE_AFTER_UPVOTES) {
+      const cachePayload: CachedPost = {
+        id: post.id,
+        title: post.title,
+        authorUsername: post.author.username ?? "",
+        content: JSON.stringify(post.content),
+        currentVote: voteType,
+        createdAt: post.createdAt,
+      }
+
+      await redis.hset(`posts:${postId}`, cachePayload);
+    }
+
+    return new Response('OK');
+    
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response("Invalid request data passed", { status: 422 });
