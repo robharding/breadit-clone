@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import EditorJS from "@editorjs/editorjs";
 import { uploadFiles } from "@/lib/uploadthing";
 import { toast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -36,6 +36,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
 
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
 
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
@@ -147,6 +148,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
       // r/subredditName/submit -> r/subredditName
       const newPathname = pathname.split("/").slice(0, -1).join("/");
       router.push(newPathname);
+      queryClient.invalidateQueries({queryKey: ['infinite-query']})
       router.refresh();
 
       return toast({

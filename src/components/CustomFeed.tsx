@@ -28,7 +28,7 @@ const CustomFeed = async () => {
         in: subscriptions
       }
     },
-    take: INFINITE_SCROLLING_PAGINATION_RESULTS
+    take: INFINITE_SCROLLING_PAGINATION_RESULTS,
   }) 
 
   return <PostFeed initialPosts={posts}  />
