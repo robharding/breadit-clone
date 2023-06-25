@@ -97,7 +97,6 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
           <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
             {post?.title ?? cachedPost.title}
           </h1>
-
           <EditorOutput content={post?.content ?? cachedPost.content} />
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { FC } from "react";
@@ -8,6 +9,11 @@ const Output = dynamic(
   async () => (await import("editorjs-react-renderer")).default,
   {
     ssr: false,
+    loading: () => (
+      <div className="py-4 flex items-center justify-center text-zinc-900">
+        <Loader2 className="h-3 w-3 animate-spin" />
+      </div>
+    ),
   }
 );
 
