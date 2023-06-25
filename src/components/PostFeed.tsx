@@ -9,6 +9,7 @@ import axios from "axios";
 import { Vote } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Post from "./Post";
+import { Loader2 } from "lucide-react";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
@@ -30,7 +31,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
       const query =
         `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}` +
         (!!subredditName ? `&subredditName=${subredditName}` : "");
-      
+
       const { data } = await axios.get(query);
       return data as ExtendedPost[];
     },
@@ -46,13 +47,12 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     if (entry?.isIntersecting) {
       fetchNextPage();
     }
-  },
-  [entry, fetchNextPage])
+  }, [entry, fetchNextPage]);
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
   return (
-    <ul className="flex flex-col col-span-2 space-y-6">
+    <ul className="flex flex-col col-span-2 space-y-6 pb-10">
       {posts.map((post, index) => {
         const votesAmount = post.votes.reduce(
           (acc, vote) => (vote.type === "UP" ? acc + 1 : acc - 1),
@@ -76,6 +76,11 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
           </li>
         );
       })}
+      {isFetchingNextPage && (
+        <li className=" bg-white shadow h-24 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </li>
+      )}
     </ul>
   );
 };

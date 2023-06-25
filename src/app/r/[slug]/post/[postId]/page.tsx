@@ -29,6 +29,9 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
     post = await db.post.findFirst({
       where: {
         id: postId,
+        subreddit: {
+          name: slug,
+        },
       },
       include: {
         votes: true,
