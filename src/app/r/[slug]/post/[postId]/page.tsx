@@ -8,6 +8,40 @@ import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+function PostVoteShell() {
+  return (
+    <div className="flex items-center flex-col pr-6 w-20">
+      {/* upvote */}
+      <div className={buttonVariants({ variant: "ghost" })}>
+        <ArrowBigUp className="h-5 w-5 text-zinc-700" />
+      </div>
+
+      {/* votes */}
+      <div className="items-center py-2 font-medium text-sm text-zinc-900">
+        <Loader2 className="h-3 w-3 animate-spin" />
+      </div>
+
+      {/* downvote */}
+      <div className={buttonVariants({ variant: "ghost" })}>
+        <ArrowBigDown className="h-5 w-5 text-zinc-700 transform rotate-180" />
+      </div>
+    </div>
+  );
+}
+
+const getData = async (postId: string) => {
+  return await db.post.findFirst({
+    where: {
+      id: postId,
+    },
+
+    include: {
+      votes: true,
+      author: true,
+    },
+  });
+};
+
 interface PageProps {
   params: {
     slug: string;
@@ -51,44 +85,12 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
           {/* @ts-ignore */}
           <PostVoteServer
             postId={postId}
-            getData={async () => {
-              return await db.post.findFirst({
-                where: {
-                  id: postId,
-                },
-
-                include: {
-                  votes: true,
-                  author: true,
-                },
-              });
-            }}
+            getData={async () => await getData(postId)}
           />
         </Suspense>
       </div>
     </div>
   );
 };
-
-function PostVoteShell() {
-  return (
-    <div className="flex items-center flex-col pr-6 w-20">
-      {/* upvote */}
-      <div className={buttonVariants({ variant: "ghost" })}>
-        <ArrowBigUp className="h-5 w-5 text-zinc-700" />
-      </div>
-
-      {/* votes */}
-      <div className="items-center py-2 font-medium text-sm text-zinc-900">
-        <Loader2 className="h-3 w-3 animate-spin" />
-      </div>
-
-      {/* downvote */}
-      <div className={buttonVariants({ variant: "ghost" })}>
-        <ArrowBigDown className="h-5 w-5 text-zinc-700 transform rotate-180" />
-      </div>
-    </div>
-  );
-}
 
 export default Page;
