@@ -10,8 +10,8 @@ const Output = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="py-4 flex items-center justify-center text-zinc-900">
-        <Loader2 className="h-3 w-3 animate-spin" />
+      <div className="flex items-center p-1 justify-center text-zinc-900">
+        <Loader2 className="h-[1.25rem] w-[1.25rem] animate-spin" />
       </div>
     ),
   }
