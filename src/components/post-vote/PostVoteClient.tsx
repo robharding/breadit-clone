@@ -54,7 +54,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
       setCurrentVote(previousVote);
       setVotesAmt((prev) => prev - (voteType === "UP" ? 1 : -1));
     },
-    onMutate: (voteType) => {
+    onMutate: (voteType) => { // optomistic update
       if(currentVote === voteType) {
         setVotesAmt((prev) => prev - (voteType === "UP" ? 1 : -1));
         setCurrentVote(undefined);
