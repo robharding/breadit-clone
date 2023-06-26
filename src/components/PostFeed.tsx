@@ -77,8 +77,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
         );
       })}
       {isFetchingNextPage && (
-        <li className="h-10 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin" />
+        <li className="h-10 flex items-center justify-center text-zinc-500">
+          <Loader2 className="w-5 h-5 animate-spin" />
         </li>
       )}
     </ul>
