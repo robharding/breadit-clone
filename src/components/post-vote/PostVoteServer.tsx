@@ -1,5 +1,4 @@
 import { Post, Vote, VoteType } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import PostVoteClient from "./PostVoteClient";
 import { getAuthSession } from "@/lib/auth";
@@ -31,7 +30,6 @@ const PostVoteServer = async ({
       0
     );
 
-    // current vote not working
     _currentVote = post.votes.find(
       (vote) => vote.userId == session?.user?.id
     )?.type;
