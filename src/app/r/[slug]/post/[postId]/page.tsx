@@ -1,3 +1,4 @@
+import CommentSection from "@/components/CommentSection";
 import EditorOutput from "@/components/EditorOutput";
 import PostVoteServer from "@/components/post-vote/PostVoteServer";
 import { buttonVariants } from "@/components/ui/Button";
@@ -77,7 +78,6 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
   if (!post && !cachedPost) {
     return notFound();
   }
-
   return (
     <div>
       <div className="h-full flex flex-col sm:flex-row items-center sm:items-start justify-between">
@@ -103,7 +103,10 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
             fallback={
               <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
             }
-          ></Suspense>
+          >
+            {/* @ts-ignore */}
+            <CommentSection postId={postId} />
+          </Suspense>
         </div>
       </div>
     </div>

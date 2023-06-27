@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge";
 import { formatDistanceToNowStrict } from "date-fns";
 import locale from "date-fns/locale/en-US";
 
-// optimizes tailwind classes (ie. mx-2 my-2 -> m-2)
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
