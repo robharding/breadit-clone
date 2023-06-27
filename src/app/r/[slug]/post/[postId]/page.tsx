@@ -103,7 +103,7 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
 
           <Suspense
             fallback={
-              <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
+              <Loader2 className="h-5 w-5 m-auto animate-spin text-zinc-500" />
             }
           >
             {/* @ts-ignore */}

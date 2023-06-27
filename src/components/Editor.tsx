@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import { useForm } from "react-hook-form";
 import { PostCreationRequest, PostValidator } from "@/lib/validators/post";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
+import { Textarea } from "./ui/Textarea";
 
 interface EditorProps {
   subredditId: string;
@@ -148,7 +148,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
       // r/subredditName/submit -> r/subredditName
       const newPathname = pathname.split("/").slice(0, -1).join("/");
       router.push(newPathname);
-      queryClient.invalidateQueries({queryKey: ['infinite-query']})
+      queryClient.invalidateQueries({ queryKey: ["infinite-query"] });
       router.refresh();
 
       return toast({
@@ -183,7 +183,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="prose prose-stone dark:prose-invert">
-          <TextareaAutosize
+          <Textarea
             ref={(e) => {
               titleRef(e);
 
