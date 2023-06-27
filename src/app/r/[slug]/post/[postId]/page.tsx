@@ -99,6 +99,8 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
           </h1>
           <EditorOutput content={post?.content ?? cachedPost.content} />
 
+          <hr className="w-full h-px my-6" />
+
           <Suspense
             fallback={
               <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
