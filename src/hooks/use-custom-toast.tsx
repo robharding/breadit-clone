@@ -2,8 +2,11 @@ import Link from "next/link";
 import { toast } from "./use-toast";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export const useCustomToast = () => {
+  const pathName = usePathname();
+
   const loginToast = () => {
     const { dismiss } = toast({
       title: "Login required.",
@@ -11,7 +14,10 @@ export const useCustomToast = () => {
       variant: "destructive",
       action: (
         <Link
-          href="/sign-in"
+          href={{
+            pathname: "/sign-in",
+            query: { redirect: pathName },
+          }}
           onClick={() => dismiss()}
           className={cn(buttonVariants({ variant: "outline" }), "text-xs")}
         >
