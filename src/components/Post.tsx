@@ -4,6 +4,7 @@ import { MessageSquare } from "lucide-react";
 import { FC, useRef } from "react";
 import EditorOutput from "./EditorOutput";
 import PostVoteClient from "./post-vote/PostVoteClient";
+import Link from "next/link";
 
 type PartialVote = Pick<Vote, "type">;
 
@@ -39,23 +40,23 @@ const Post: FC<PostProps> = ({
           <div className="max-h-40 mt-1 text-xs text-gray-500">
             {subredditName ? (
               <>
-                <a
+                <Link
                   href={`/r/${subredditName}`}
                   className="underline text-zinc-900 text-sm underline-offset-2"
                 >
                   r/{subredditName}
-                </a>
+                </Link>
                 <span className="px-1">•</span>
               </>
             ) : null}
             <span>Posted by u/{post.author.username}</span>{" "}
             {formatTimeToNow(new Date(post.createdAt))}
           </div>
-          <a href={`/r/${subredditName}/post/${post.id}`}>
+          <Link prefetch={false} href={`/r/${subredditName}/post/${post.id}`}>
             <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900">
               {post.title}
             </h1>
-          </a>
+          </Link>
 
           {/* blur post preview if it's too long */}
           <div
@@ -72,13 +73,14 @@ const Post: FC<PostProps> = ({
       </div>
 
       <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6">
-        <a
+        <Link
+          prefetch={false}
           className="w-fit flex items-center gap-2"
           href={`/r/${subredditName}/post/${post.id}`}
         >
           <MessageSquare className="h-4 w-4" />
           {commentAmt} comments
-        </a>
+        </Link>
       </div>
     </div>
   );
