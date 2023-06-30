@@ -53,7 +53,6 @@ interface PageProps {
 }
 
 export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
 
 const Page = async ({ params: { slug, postId } }: PageProps) => {
   const cachedPost = (await redis.hgetall(`posts:${postId}`)) as CachedPost;
