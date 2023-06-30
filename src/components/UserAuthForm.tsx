@@ -6,18 +6,22 @@ import { cn } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 import { Icons } from "./Icons";
 import { useToast } from "@/hooks/use-toast";
+import { useSearchParams } from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   const loginWithGoogle = async () => {
     setIsLoading(true);
 
     try {
-      await signIn("google", { callbackUrl: "/" });
+      await signIn("google", {
+        callbackUrl: searchParams.get("redirect") || "/",
+      });
     } catch (error) {
       toast({
         title: "There was a problem.",
