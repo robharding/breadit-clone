@@ -1,10 +1,15 @@
 "use client";
 
-import { FC, useRef } from "react";
+import { FC, useRef, useState } from "react";
 import UserAvatar from "./UserAvatar";
 import { Comment, CommentVote, User, VoteType } from "@prisma/client";
 import { formatTimeToNow } from "@/lib/utils";
 import CommentVotes from "./CommentVotes";
+import { Button } from "./ui/Button";
+import { MessageSquare } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { Label } from "./ui/Label";
 
 type ExtendedComment = Comment & {
   author: User;
@@ -15,14 +20,22 @@ interface PostCommentProps {
   comment: ExtendedComment;
   votesAmt: number;
   currentVote?: VoteType;
+  postId: string;
 }
 
 const PostComment: FC<PostCommentProps> = ({
   comment,
   votesAmt,
   currentVote,
+  postId,
 }) => {
+  const router = useRouter();
+  const pathName = usePathname();
+
+  const { data: session } = useSession();
+
   const commentRef = useRef<HTMLDivElement>(null);
+  const [isReplying, setIsReplying] = useState<boolean>(false);
 
   return (
     <div ref={commentRef} className="flex flex-col">
@@ -53,6 +66,27 @@ const PostComment: FC<PostCommentProps> = ({
           initialVotesAmt={votesAmt}
           initialVote={currentVote}
         />
+
+        <Button
+          onClick={() => {
+            if (!session) {
+              router.push(`/sign-in?redirect=${pathName}`);
+            }
+
+            setIsReplying((prev) => !prev);
+          }}
+          variant="ghost"
+          size="xs"
+        >
+          <MessageSquare className="h-4 w-4 mr-1.5" />
+          Reply
+        </Button>
+
+        {isReplying ? (
+          <div className="grid w-full gap-1.5">
+            <Label>Your comment</Label>
+          </div>
+        ) : null}
       </div>
     </div>
   );

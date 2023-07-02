@@ -49,6 +49,7 @@ const CommentSection = async ({ postId }: CommentSectionProps) => {
               <div key={topLevelComment.id} className="flex flex-col">
                 <div className="mb-2">
                   <PostComment
+                    postId={postId}
                     comment={topLevelComment}
                     votesAmt={topLevelCommentVotesAmt}
                     currentVote={topLevelCommentVote?.type}
