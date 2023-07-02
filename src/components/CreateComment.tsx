@@ -13,9 +13,10 @@ import { useRouter } from "next/navigation";
 
 interface CreateCommentProps {
   postId: string;
+  replyToId?: string;
 }
 
-const CreateComment: FC<CreateCommentProps> = ({ postId }) => {
+const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
   const [input, setInput] = useState<string>("");
   const { loginToast } = useCustomToast();
   const router = useRouter();
@@ -81,7 +82,7 @@ const CreateComment: FC<CreateCommentProps> = ({ postId }) => {
               submitComment({
                 postId,
                 text: input,
-                replyToId: undefined,
+                replyToId: replyToId,
               })
             }
           >
