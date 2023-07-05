@@ -35,6 +35,7 @@ const Post: FC<PostProps> = ({
           postId={post.id}
           initialVotesAmt={votesAmt}
           initialVote={currentVote?.type}
+          onFeed
         />
         <div className="w-0 flex-1">
           <div className="max-h-40 mt-1 text-xs text-gray-500">

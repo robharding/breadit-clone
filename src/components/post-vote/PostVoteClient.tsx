@@ -16,12 +16,14 @@ interface PostVoteClientProps {
   postId: string;
   initialVotesAmt: number;
   initialVote?: VoteType | null;
+  onFeed?: boolean;
 }
 
 const PostVoteClient: FC<PostVoteClientProps> = ({
   postId,
   initialVotesAmt,
   initialVote,
+  onFeed,
 }) => {
   const { loginToast } = useCustomToast();
   const [votesAmt, setVotesAmt] = useState<number>(initialVotesAmt);
@@ -68,7 +70,12 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
   });
 
   return (
-    <div className="flex sm:flex-col gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0">
+    <div
+      className={cn(
+        "flex gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0",
+        onFeed ? "flex-col" : "sm:flex-col"
+      )}
+    >
       <Button
         size="sm"
         variant="ghost"
