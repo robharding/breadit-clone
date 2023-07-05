@@ -68,7 +68,7 @@ const CommentSection = async ({ postId }: CommentSectionProps) => {
                   return (
                     <div
                       key={reply.id}
-                      className="mt-4 pl-4 border-l-2 border-zinc-200"
+                      className="mt-4 pl-4 border-l-4 border-zinc-200"
                     >
                       <PostComment
                         postId={postId}
