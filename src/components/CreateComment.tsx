@@ -64,6 +64,7 @@ const CreateComment: FC<CreateCommentProps> = ({
       });
     },
     onSuccess() {
+      cancelCreate?.();
       router.refresh();
     },
   });
@@ -90,13 +91,13 @@ const CreateComment: FC<CreateCommentProps> = ({
           <Button
             isLoading={isLoading}
             disabled={input.length == 0}
-            onClick={() =>
+            onClick={() => {
               submitComment({
                 postId,
                 text: input,
                 replyToId: replyToId,
-              })
-            }
+              });
+            }}
           >
             Post
           </Button>
