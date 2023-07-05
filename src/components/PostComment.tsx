@@ -9,7 +9,7 @@ import { Button } from "./ui/Button";
 import { MessageSquare } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Label } from "./ui/Label";
+import CreateComment from "./CreateComment";
 
 type ExtendedComment = Comment & {
   author: User;
@@ -21,6 +21,7 @@ interface PostCommentProps {
   votesAmt: number;
   currentVote?: VoteType;
   postId: string;
+  reply?: boolean;
 }
 
 const PostComment: FC<PostCommentProps> = ({
@@ -28,6 +29,7 @@ const PostComment: FC<PostCommentProps> = ({
   votesAmt,
   currentVote,
   postId,
+  reply,
 }) => {
   const router = useRouter();
   const pathName = usePathname();
@@ -67,27 +69,34 @@ const PostComment: FC<PostCommentProps> = ({
           initialVote={currentVote}
         />
 
-        <Button
-          onClick={() => {
-            if (!session) {
-              router.push(`/sign-in?redirect=${pathName}`);
-            }
+        {!reply && (
+          <Button
+            onClick={() => {
+              if (!session) {
+                router.push(`/sign-in?redirect=${pathName}`);
+              }
 
-            setIsReplying((prev) => !prev);
-          }}
-          variant="ghost"
-          size="xs"
-        >
-          <MessageSquare className="h-4 w-4 mr-1.5" />
-          Reply
-        </Button>
-
-        {isReplying ? (
-          <div className="grid w-full gap-1.5">
-            <Label>Your comment</Label>
-          </div>
-        ) : null}
+              setIsReplying((prev) => !prev);
+            }}
+            variant="ghost"
+            size="xs"
+          >
+            <MessageSquare className="h-4 w-4 mr-1.5" />
+            Reply
+          </Button>
+        )}
       </div>
+      {isReplying ? (
+        <div className="mt-2 ml-4">
+          <CreateComment
+            postId={postId}
+            replyToId={comment.replyToId ?? comment.id}
+            cancelCreate={() => {
+              setIsReplying(false);
+            }}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

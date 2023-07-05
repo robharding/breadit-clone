@@ -14,9 +14,14 @@ import { useRouter } from "next/navigation";
 interface CreateCommentProps {
   postId: string;
   replyToId?: string;
+  cancelCreate?: () => void;
 }
 
-const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
+const CreateComment: FC<CreateCommentProps> = ({
+  postId,
+  replyToId,
+  cancelCreate,
+}) => {
   const [input, setInput] = useState<string>("");
   const { loginToast } = useCustomToast();
   const router = useRouter();
@@ -28,6 +33,8 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
         text,
         replyToId,
       };
+
+      if (text.length == 0) return;
 
       const { data } = await axios.patch(
         "/api/subreddit/post/comment",
@@ -74,7 +81,12 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
           placeholder="What are your thoughts?"
         />
 
-        <div className="mt-2 flex justify-end">
+        <div className="mt-2 flex justify-end gap-x-2">
+          {replyToId ? (
+            <Button tabIndex={-1} variant="subtle" onClick={cancelCreate}>
+              Cancel
+            </Button>
+          ) : null}
           <Button
             isLoading={isLoading}
             disabled={input.length == 0}

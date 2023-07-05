@@ -40,12 +40,12 @@ const Post: FC<PostProps> = ({
           <div className="max-h-40 mt-1 text-xs text-gray-500">
             {subredditName ? (
               <>
-                <Link
+                <a
                   href={`/r/${subredditName}`}
                   className="underline text-zinc-900 text-sm underline-offset-2"
                 >
                   r/{subredditName}
-                </Link>
+                </a>
                 <span className="px-1">•</span>
               </>
             ) : null}
