@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import { Command, CommandInput, CommandItem, CommandList } from "./ui/Command";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -9,13 +9,18 @@ import { CommandEmpty, CommandGroup } from "cmdk";
 import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import debounce from "lodash.debounce";
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 
 interface SearchBarProps {}
 
 const SearchBar: FC<SearchBarProps> = ({}) => {
   const [input, setInput] = useState<string>("");
-
   const router = useRouter();
+  const commandRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(commandRef, () => {
+    setInput("");
+  });
 
   const request = debounce(() => {
     refetch();
@@ -35,8 +40,6 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
     queryFn: async () => {
       if (!input) return [];
 
-      console.log("fetching...");
-
       const { data } = await axios.get(`/api/search?q=${input}`);
       return data as (Subreddit & {
         _count: Prisma.SubredditCountOutputType;
@@ -47,8 +50,12 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
   });
 
   return (
-    <Command className="relative rounded-lg border max-w-sm z-50 overflow-visible">
+    <Command
+      ref={commandRef}
+      className="relative rounded-lg border max-w-sm z-50 overflow-visible"
+    >
       <CommandInput
+        isLoading={isFetching}
         value={input}
         onValueChange={(text) => {
           setInput(text);
