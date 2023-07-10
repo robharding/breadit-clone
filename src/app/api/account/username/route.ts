@@ -4,7 +4,6 @@ import { UsernameValidator } from "@/lib/validators/username";
 import { z } from "zod";
 
 export async function PATCH(req: Request) {
-  const url = new URL(req.url);
   const session = await getAuthSession();
 
   if (!session?.user)
@@ -36,7 +35,6 @@ export async function PATCH(req: Request) {
     return new Response(username);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.log(error.errors);
       return new Response("Invalid request data passed", { status: 422 });
     }
     return new Response("Could not change username", { status: 500 });
