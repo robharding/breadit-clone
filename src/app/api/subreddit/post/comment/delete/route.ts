@@ -24,6 +24,15 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
 
+    await db.comment.updateMany({
+      where: {
+        replyToId: id,
+      },
+      data: {
+        replyToId: null,
+      },
+    });
+
     await db.comment.delete({
       where: {
         id,
