@@ -7,3 +7,9 @@ export const CommentValidator = z.object({
 });
 
 export type CommentCreationRequest = z.infer<typeof CommentValidator>;
+
+export const CommentDeleteValidator = z.object({
+  id: z.string(),
+});
+
+export type CommentDeletionRequest = z.infer<typeof CommentDeleteValidator>;

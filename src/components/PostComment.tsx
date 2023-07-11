@@ -6,10 +6,14 @@ import { Comment, CommentVote, User, VoteType } from "@prisma/client";
 import { formatTimeToNow } from "@/lib/utils";
 import CommentVotes from "./CommentVotes";
 import { Button } from "./ui/Button";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import CreateComment from "./CreateComment";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { CommentDeletionRequest } from "@/lib/validators/comment";
+import { useToast } from "@/hooks/use-toast";
 
 type ExtendedComment = Comment & {
   author: User;
@@ -33,11 +37,37 @@ const PostComment: FC<PostCommentProps> = ({
 }) => {
   const router = useRouter();
   const pathName = usePathname();
+  const { toast } = useToast();
 
   const { data: session } = useSession();
 
   const commentRef = useRef<HTMLDivElement>(null);
   const [isReplying, setIsReplying] = useState<boolean>(false);
+
+  const isOwner = session?.user.id == comment.authorId;
+
+  const { mutate: deleteComment } = useMutation({
+    mutationFn: async (payload: CommentDeletionRequest) => {
+      const { data } = await axios.post(
+        "/api/subreddit/post/comment/delete",
+        payload
+      );
+
+      return data;
+    },
+    onError() {
+      return toast({
+        description: "something went wrong.",
+        variant: "destructive",
+      });
+    },
+    onSuccess() {
+      router.refresh();
+      return toast({
+        description: "comment deleted",
+      });
+    },
+  });
 
   return (
     <div ref={commentRef} className="flex flex-col">
@@ -83,6 +113,16 @@ const PostComment: FC<PostCommentProps> = ({
           >
             <MessageSquare className="h-4 w-4 mr-1.5" />
             Reply
+          </Button>
+        )}
+        {isOwner && (
+          <Button
+            onClick={() => deleteComment({ id: comment.id })}
+            variant="destructive"
+            className="bg-red-500"
+            size="xs"
+          >
+            <X className="h-4 w-4" />
           </Button>
         )}
       </div>
