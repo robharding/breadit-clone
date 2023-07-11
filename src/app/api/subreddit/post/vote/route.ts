@@ -78,6 +78,7 @@ export async function PATCH(req: Request) {
         id: post.id,
         title: post.title,
         authorUsername: post.author.username ?? "",
+        authorId: post.authorId,
         content: JSON.stringify(post.content),
         createdAt: post.createdAt,
       };

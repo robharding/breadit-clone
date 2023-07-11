@@ -1,7 +1,9 @@
 import CommentSection from "@/components/CommentSection";
 import EditorOutput from "@/components/EditorOutput";
+import PostDeleteButton from "@/components/PostDeleteButton";
 import PostVoteServer from "@/components/post-vote/PostVoteServer";
 import { buttonVariants } from "@/components/ui/Button";
+import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { redis } from "@/lib/redis";
 import { formatTimeToNow } from "@/lib/utils";
@@ -77,6 +79,10 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
   if (!post && !cachedPost) {
     return notFound();
   }
+
+  const session = await getAuthSession();
+  const isOwner = session?.user?.id == (post?.authorId ?? cachedPost?.authorId);
+
   return (
     <div>
       <div className="h-full flex flex-col sm:flex-row items-center sm:items-start justify-between">
@@ -88,11 +94,16 @@ const Page = async ({ params: { slug, postId } }: PageProps) => {
           />
         </Suspense>
 
-        <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
+        <div className="relative sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
           <p className="max-h-40 mt-1 truncate text-xs text-gray-500">
             Posted by u/{post?.author.username ?? cachedPost?.authorUsername}{" "}
-            {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
+            {formatTimeToNow(
+              new Date(post?.createdAt ?? cachedPost?.createdAt)
+            )}
           </p>
+
+          {isOwner && <PostDeleteButton postId={post?.id || cachedPost?.id} />}
+
           <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
             {post?.title ?? cachedPost.title}
           </h1>
