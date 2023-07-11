@@ -9,6 +9,11 @@ import React from "react";
 export const metadata = {
   title: "Breadit",
   description: "A Reddit clone built with Next.js and TypeScript.",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
 };
 
 const inter = Inter({ subsets: ["latin"] });
