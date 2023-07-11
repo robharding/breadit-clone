@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FC } from "react";
 import { buttonVariants } from "./ui/Button";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface SignInButtonProps {}
 
@@ -16,7 +17,7 @@ const SignInButton: FC<SignInButtonProps> = ({}) => {
         pathname: "/sign-in",
         query: { redirect: pathName },
       }}
-      className={buttonVariants()}
+      className={cn(buttonVariants(), "min-w-fit")}
     >
       Sign In
     </Link>
