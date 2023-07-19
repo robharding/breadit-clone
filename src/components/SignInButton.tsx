@@ -17,7 +17,7 @@ const SignInButton: FC<SignInButtonProps> = ({}) => {
         pathname: "/sign-in",
         query: { redirect: pathName },
       }}
-      className={cn(buttonVariants(), "min-w-fit")}
+      className={cn(buttonVariants(), "")}
     >
       Sign In
     </Link>
