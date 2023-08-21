@@ -7,23 +7,25 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import axios from "axios";
 import { Vote } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import Post from "./Post";
 import { Loader2 } from "lucide-react";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
   subredditName?: string;
+  userId: string | undefined;
 }
 
-const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
+const PostFeed: FC<PostFeedProps> = ({
+  initialPosts,
+  subredditName,
+  userId,
+}) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
     threshold: 1,
   });
-
-  const { data: session } = useSession();
 
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ["infinite-query"],
@@ -59,9 +61,9 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
           0
         );
 
-        const currentVote = post.votes.find(
-          (vote: Vote) => vote.userId === session?.user.id
-        );
+        const currentVote = post.votes.find((vote: Vote) => {
+          return vote.userId === userId;
+        });
 
         // if it's the last post, add a ref to it so we can fetch more posts when its in view
         return (

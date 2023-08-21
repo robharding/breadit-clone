@@ -1,20 +1,20 @@
-import { INFINITE_SCROLLING_PAGINATION_RESULTS } from '@/config'
-import { db } from '@/lib/db'
-import PostFeed from './PostFeed'
+import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
+import { db } from "@/lib/db";
+import PostFeed from "./PostFeed";
 
 const GeneralFeed = async () => {
   const posts = await db.post.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
     include: {
       votes: true,
       author: true,
       comments: true,
       subreddit: true,
     },
-    take: INFINITE_SCROLLING_PAGINATION_RESULTS
-  }) 
+    take: INFINITE_SCROLLING_PAGINATION_RESULTS,
+  });
 
-  return <PostFeed initialPosts={posts}  />
-}
+  return <PostFeed initialPosts={posts} userId={undefined} />;
+};
 
-export default GeneralFeed
+export default GeneralFeed;
