@@ -38,6 +38,8 @@ const PostVoteServer = async ({
     _currentVote = initialVote;
   }
 
+  // nothing
+
   return (
     <PostVoteClient
       initialVotesAmt={_votesAmt}
