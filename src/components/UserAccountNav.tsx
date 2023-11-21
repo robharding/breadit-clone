@@ -56,7 +56,10 @@ const UserAccountNav: FC<UserAccountNavProps> = ({ user }) => {
         />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-white rounded mt-1 p-2" align="end">
+      <DropdownMenuContent
+        className="bg-white rounded mt-1 p-2 border border-black/[0.05]"
+        align="end"
+      >
         <div className="flex items-center justify-start p-2">
           <div className="flex flex-col gap-1 leading-none">
             {user.name && <p className="font-medium">{user.name}</p>}
